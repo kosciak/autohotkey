@@ -8,7 +8,11 @@
 ;	Based on: http://www.instructables.com/id/%22Drop-Down%22%2c-Quake-style-command-prompt-for-Window/
 ;	Opens Console in a Quake style (at the top of the screen using Win+Tilda)
 ;	
-; Script Version: 0.1
+; Script Version: 0.2
+;
+; Changelog:
+;	0.2		- Ctrl+Tilda for Explorer window acts as Console Here
+;	0.1		- Initial Release, same as http://www.instructables.com/id/%22Drop-Down%22%2c-Quake-style-command-prompt-for-Window/
 ;
 ; Additional Info:
 ;	Change "ahk_class ATL:00456188" to what you get after inspecting Console's window
@@ -21,16 +25,41 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; -----------------------------------
 ; Launch console if necessary; hide/show on Win+`
 ; -----------------------------------
-#`::
+#`::GoSub, ShowHide
+
+; hide console on "esc".
+#IfWinActive ahk_class ATL:00456188
+esc::GoSub, Hide
+
+; Ctrl+Tilda works as Console Here
+#IfWinActive ahk_class CabinetWClass
+^`::
+	path := GetPath()
+	GoSub, ShowHide
+	DriveLetter := SubStr(path, 1, 1)
+	Path := SubStr(path, 3)
+
+	WinWait, ahk_class ATL:00456188
+	SendPlay, pushd{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
+
+return
+
+
+Hide:
+ {
+   WinHide ahk_class ATL:00456188
+   WinActivate ahk_class Shell_TrayWnd
+ }
+return
+
+ShowHide:
 DetectHiddenWindows, on
 IfWinExist ahk_class ATL:00456188
 {
 	
 	IfWinActive ahk_class ATL:00456188
 	  {
-			WinHide ahk_class ATL:00456188
-			; need to move the focus somewhere else.
-			WinActivate ahk_class Shell_TrayWnd
+			GoSub, Hide
 		}
 	else
 	  {
@@ -40,20 +69,13 @@ IfWinExist ahk_class ATL:00456188
 }
 else
 	Run "C:\Program Files\Console2\Console.exe" -c kosciak-big.xml -w Console
-; the above assumes a shortcut in the c:\windows folder to console.exe.
-; also assumes console is using the default console.xml file, or
-; that the desired config file is set in the shortcut.
 
 DetectHiddenWindows, off
 return
 
-; hide console on "esc".
-#IfWinActive ahk_class ATL:00456188
-esc::
- {
-   WinHide ahk_class ATL:00456188
-   WinActivate ahk_class Shell_TrayWnd
- }
-return
-
-
+GetPath(){
+	WinGetText, title
+	position := InStr(title, "`n")
+	path := SubStr(title, 1, position - 2)
+	return path
+}
