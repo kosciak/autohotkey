@@ -40,10 +40,13 @@ esc::GoSub, Hide
 	Path := SubStr(path, 3)
 
 	WinWait, ahk_class ATL:00456188
-	SendPlay, pushd{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
+	SendPlay, {Ctrl Down}{F5}{Ctrl Up}pushd{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
 
 return
 
+; Enable Ctrl-V shortcut for pasting
+#IfWinActive ahk_class ATL:00456188
+^v::SendPlay {Shift Down}{Insert}{Shift Up}
 
 Hide:
  {
