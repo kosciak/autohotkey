@@ -31,6 +31,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #IfWinActive ahk_class ATL:00456188
 esc::GoSub, Hide
 
+; Enable Ctrl-V shortcut for pasting
+^v::SendPlay {Shift Down}{Insert}{Shift Up}
+
+#IfWinActive
+
 ; Ctrl+Tilda works as Console Here
 #IfWinActive ahk_class CabinetWClass
 ^`::
@@ -43,10 +48,7 @@ esc::GoSub, Hide
 	SendPlay, {Ctrl Down}{F5}{Ctrl Up}pushd{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
 
 return
-
-; Enable Ctrl-V shortcut for pasting
-#IfWinActive ahk_class ATL:00456188
-^v::SendPlay {Shift Down}{Insert}{Shift Up}
+#IfWinActive
 
 Hide:
  {
