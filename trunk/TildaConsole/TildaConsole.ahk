@@ -11,6 +11,7 @@
 ; Script Version: 0.3
 ;
 ; Changelog:
+;	0.4		- Option for creating new tab in Console Here
 ;	0.3		- Enabled Ctrl-V por pasting
 ;			- Added closing #IfWinActive directives
 ;			- Simplified Path pasting in Ctrl-Tilda
@@ -24,6 +25,10 @@
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+
+SetUp:
+	NewTab = 0		; Set to 1 if you want new tabs
+return
 
 ; -----------------------------------
 ; Launch console if necessary; hide/show on Win+`
@@ -47,7 +52,9 @@ esc::GoSub, Hide
 	GoSub, ShowHide
 
 	WinWait, Console2
-	SendPlay, {Ctrl Down}{F5}{Ctrl Up}pushd {Shift Down}{Insert}{Shift Up}{Enter} ;{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
+	If (NewTab = 1)
+		SendPlay, {Ctrl Down}{F5}{Ctrl Up}
+	SendPlay, pushd {Shift Down}{Insert}{Shift Up}{Enter} ;{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
 	clipboard = %ClipboardOld%
 	ClipBoardOld = 
 return
@@ -70,9 +77,10 @@ ShowHide:
 			WinShow Console2
 			WinActivate Console2
 		}
-	} else 
+	} else {
+		GoSub, SetUp
 		Run "C:\Program Files\Console2\Console.exe" -c kosciak-big.xml
-	
+	}
 	DetectHiddenWindows, off
 return
 
