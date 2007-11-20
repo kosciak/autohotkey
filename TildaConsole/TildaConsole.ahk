@@ -18,7 +18,7 @@
 ;	0.1		- Initial Release, same as http://www.instructables.com/id/%22Drop-Down%22%2c-Quake-style-command-prompt-for-Window/
 ;
 ; Additional Info:
-;	Change "ahk_class ATL:00456188" to what you get after inspecting Console's window
+;	Change "Console2" to what you get after inspecting Console's window
 ;
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -31,7 +31,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #`::GoSub, ShowHide
 
 ; hide console on "esc".
-#IfWinActive ahk_class ATL:00456188
+#IfWinActive Console2
 esc::GoSub, Hide
 
 ; Enable Ctrl-V shortcut for pasting
@@ -46,44 +46,40 @@ esc::GoSub, Hide
 	clipboard := GetPath()
 	GoSub, ShowHide
 
-	WinWait, ahk_class ATL:00456188
+	WinWait, Console2
 	SendPlay, {Ctrl Down}{F5}{Ctrl Up}pushd {Shift Down}{Insert}{Shift Up}{Enter} ;{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
 	clipboard = %ClipboardOld%
-	
+	ClipBoardOld = 
 return
 #IfWinActive
 
 Hide:
- {
-   WinHide ahk_class ATL:00456188
-   WinActivate ahk_class Shell_TrayWnd
- }
+{
+	WinHide Console2
+	WinActivate ahk_class Shell_TrayWnd
+}
 return
 
 ShowHide:
-DetectHiddenWindows, on
-IfWinExist ahk_class ATL:00456188
-{
-	
-	IfWinActive ahk_class ATL:00456188
-	  {
+	DetectHiddenWindows, on
+	IfWinExist Console2
+	{
+		IfWinActive Console2
 			GoSub, Hide
+		else {
+			WinShow Console2
+			WinActivate Console2
 		}
-	else
-	  {
-	    WinShow ahk_class ATL:00456188
-	    WinActivate ahk_class ATL:00456188
-	  }
-}
-else
-	Run "C:\Program Files\Console2\Console.exe" -c kosciak-big.xml -w Console
-
-DetectHiddenWindows, off
+	} else 
+		Run "C:\Program Files\Console2\Console.exe" -c kosciak-big.xml
+	
+	DetectHiddenWindows, off
 return
 
 GetPath(){
 	WinGetText, title
 	position := InStr(title, "`n")
 	path := SubStr(title, 1, position - 2)
+	position := ""
 	return path
 }
