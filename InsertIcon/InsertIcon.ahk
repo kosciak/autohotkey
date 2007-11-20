@@ -5,7 +5,7 @@
 ; Author:         A.N.Other <myemail@nowhere.com>
 ;
 ; Script Function:
-;	Monitors CapsLock, if on shows an icon in tray
+;	Monitors Insert, if on shows an icon in tray
 ;	
 ; Script Version: 0.1
 ;
@@ -14,11 +14,11 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #NoTrayIcon
-Menu, Tray, Icon, CL.ico
+Menu, Tray, Icon, Ins.ico
 #Persistent
 #SingleInstance force
 
-PrevCapsState = %False%
+PrevInsertState = %True%
 
 Loop {
 	GoSub, Check
@@ -26,13 +26,14 @@ Loop {
 }
 
 Check:
-	CapsState := GetKeyState("Capslock", "T")
-	If (%CapsState% = False) {
+	InsertState := GetKeyState("Insert", "T")
+	If %InsertState% {
 		Menu, Tray, NoIcon
 	} Else {
 		Menu, Tray, Icon
-		If (%PrevCapsState% = False)
-			TrayTip, , CapsLock
+		If %PrevInsertState%
+			TrayTip, , Insert
+
 	}
-	PrevCapsState = %CapsState%
+	PrevInsertState = %InsertState%
 return
