@@ -8,9 +8,12 @@
 ;	Based on: http://www.instructables.com/id/%22Drop-Down%22%2c-Quake-style-command-prompt-for-Window/
 ;	Opens Console in a Quake style (at the top of the screen using Win+Tilda)
 ;	
-; Script Version: 0.2
+; Script Version: 0.3
 ;
 ; Changelog:
+;	0.3		- Enabled Ctrl-V por pasting
+;			- Added closing #IfWinActive directives
+;			- Simplified Path pasting in Ctrl-Tilda
 ;	0.2		- Ctrl+Tilda for Explorer window acts as Console Here
 ;	0.1		- Initial Release, same as http://www.instructables.com/id/%22Drop-Down%22%2c-Quake-style-command-prompt-for-Window/
 ;
@@ -32,21 +35,21 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 esc::GoSub, Hide
 
 ; Enable Ctrl-V shortcut for pasting
-^v::SendPlay {Shift Down}{Insert}{Shift Up}
+^v::Send {Shift Down}{Insert}{Shift Up}
 
 #IfWinActive
 
 ; Ctrl+Tilda works as Console Here
 #IfWinActive ahk_class CabinetWClass
 ^`::
-	path := GetPath()
+	ClipboardOld = %clipboard%
+	clipboard := GetPath()
 	GoSub, ShowHide
-	DriveLetter := SubStr(path, 1, 1)
-	Path := SubStr(path, 3)
 
 	WinWait, ahk_class ATL:00456188
-	SendPlay, {Ctrl Down}{F5}{Ctrl Up}pushd{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
-
+	SendPlay, {Ctrl Down}{F5}{Ctrl Up}pushd {Shift Down}{Insert}{Shift Up}{Enter} ;{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
+	clipboard = %ClipboardOld%
+	
 return
 #IfWinActive
 
