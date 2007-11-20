@@ -79,9 +79,9 @@ return
 
 ; Get rid of Progress bar and Splash Screen
 TurnProgressOff:
-Progress, Off
+	Progress, Off
 return
 
 TurnSplashOff:
-SplashImage, Off
+	SplashImage, Off
 return
