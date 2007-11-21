@@ -13,8 +13,27 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force
 
+applicationname = KosciaK's scripts
+
+Menu,Tray,DeleteAll
+Menu,Tray,NoStandard
+Menu,Tray,Add,%applicationname%,ABOUT
+Menu,Tray,Add
+Menu,Tray,Default,%applicationname%
+Menu,Tray,Add,&About...,ABOUT
+Menu,Tray,Add,&Exit,EXIT
+Menu,Tray,Tip,%applicationname%
+
 Run, CapsLockIcon\CapsLockIcon.ahk
 
 #Include KeyboardShortcuts\KeyboardShortcuts.ahk
 #Include OSDVolumeDisplay\OSDVolumeDisplay.ahk
 #Include TildaConsole\TildaConsole.ahk
+
+ABOUT:
+Text = - TildaConsole`n- OSDVolumeDisplay`n- CapsLockIcon`n- KeyboardShortcuts
+MsgBox, 0, KosciaK's AutoHotKey scripts, %Text%
+return
+
+EXIT:
+ExitApp
