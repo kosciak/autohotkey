@@ -19,7 +19,7 @@
 ;	0.1		- Initial Release, same as http://www.instructables.com/id/%22Drop-Down%22%2c-Quake-style-command-prompt-for-Window/
 ;
 ; Additional Info:
-;	Change "Console2" to what you get after inspecting Console's window
+;	Change "Console2_hidden" to what you get after inspecting Console's window
 ;
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -37,7 +37,7 @@ return
 #`::GoSub, ShowHide
 
 ; hide console on "esc".
-#IfWinActive Console2
+#IfWinActive Console2_hidden
 esc::GoSub, Hide
 
 ; Enable Ctrl-V shortcut for pasting
@@ -52,10 +52,10 @@ esc::GoSub, Hide
 	clipboard := GetPath()
 	GoSub, ShowHide
 
-	WinWait, Console2
+	WinWait, Console2_hidden
 	If (NewTab = 1)
-		SendPlay, {Ctrl Down}{F5}{Ctrl Up}
-	SendPlay, pushd {Shift Down}{Insert}{Shift Up}{Enter} ;{Space}%DriveLetter%{SHIFTDOWN};{SHIFTUP}%Path%{Enter}
+		SendPlay, {Ctrl Down}{F1}{Ctrl Up}
+	SendPlay, pushd {Shift Down}{Insert}{Shift Up}{Enter}
 	clipboard = %ClipboardOld%
 	ClipBoardOld = 
 return
@@ -63,24 +63,24 @@ return
 
 Hide:
 {
-	WinHide Console2
+	WinHide Console2_hidden
 	WinActivate ahk_class Shell_TrayWnd
 }
 return
 
 ShowHide:
 	DetectHiddenWindows, on
-	IfWinExist Console2
+	IfWinExist Console2_hidden
 	{
-		IfWinActive Console2
+		IfWinActive Console2_hidden
 			GoSub, Hide
 		else {
-			WinShow Console2
-			WinActivate Console2
+			WinShow Console2_hidden
+			WinActivate Console2_hidden
 		}
 	} else {
 		GoSub, SetUp
-		Run "C:\Program Files\Console2\Console.exe" -c kosciak-big.xml
+		Run "C:\Program Files\Console2\Console.exe" -c kosciak.xml -w Console2_hidden
 	}
 	DetectHiddenWindows, off
 return
