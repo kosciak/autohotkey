@@ -19,9 +19,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; 	Set new keyboard shortcuts
 ; -----------------------------------
 
-; Assign Ctrl-Alt-R as a hotkey to restart the script.
-^!r::Reload  
-
 ; Use Win + Capslock to minimize Window
 !Capslock::WinMinimize,A
 
