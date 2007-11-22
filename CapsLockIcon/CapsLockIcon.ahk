@@ -2,7 +2,7 @@
 ; AutoHotkey Version: 1.x
 ; Language:       English
 ; Platform:       Win9x/NT
-; Author:         A.N.Other <myemail@nowhere.com>
+; Author:         Wojciech 'KosciaK' Pietrzok <kosciak1@gmail.com>
 ;
 ; Script Function:
 ;	Monitors CapsLock, if on shows an icon in tray
@@ -20,19 +20,15 @@ Menu, Tray, Icon, CL.ico
 
 PrevCapsState = %False%
 
-Loop {
-	GoSub, Check
-	Sleep, 250
-}
-
 Check:
 	CapsState := GetKeyState("Capslock", "T")
-	If (%CapsState% = False) {
+	If (CapsState = False) {
 		Menu, Tray, NoIcon
 	} Else {
 		Menu, Tray, Icon
-		If (%PrevCapsState% = False)
+		If (PrevCapsState = False)
 			TrayTip, , CapsLock
 	}
 	PrevCapsState = %CapsState%
+	SetTimer, Check, 250
 return
