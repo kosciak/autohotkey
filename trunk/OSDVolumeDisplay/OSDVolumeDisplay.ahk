@@ -10,7 +10,9 @@
 ;	Win- - Volume down by 5%
 ;	Win0 - Sound on/off
 ;
-; Script Version: 0.1
+; Script Version: 0.2
+;
+;	Added Win+MiddleMouse/WheelUp/WheelDown
 ;
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -25,6 +27,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; Mute
 #Numpad0::
 #0::
+#MButton::
 	SoundSet,+1,,mute
 	GoSub, DisplayMute
 return
@@ -32,6 +35,7 @@ return
 ; Volume Up
 #NumpadAdd::
 #=::
+#WheelUp::
 	SoundSet +5  ; Increase master volume by 10%
 	GoSub, DisplayVolume
 return
@@ -39,6 +43,7 @@ return
 ; Volume Down
 #NumpadSub::
 #-::
+#WheelDown::
 	SoundSet -5  ; Decrease master volume by 10%
 	GoSub, DisplayVolume
 return
