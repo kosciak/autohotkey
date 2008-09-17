@@ -19,8 +19,16 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; 	Set new keyboard shortcuts
 ; -----------------------------------
 
-; Use Win + Capslock to minimize Window
+; Use Alt + Capslock to minimize Window
 !Capslock::WinMinimize,A
+
+; Use Alt + Shoft to Maximize/DeMaximize Window
+!Shift::
+	WinGet MX, MinMax, A
+	If MX
+	WinRestore A
+	Else WinMaximize A
+return
 
 ; Open Drives by Win-Shift-DriveLetter
 #+A::run a:\
